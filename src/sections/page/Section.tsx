@@ -1,4 +1,5 @@
 import CTASection from "./CTASection";
+import FooterSection from "./FooterSection";
 import HeroSection from "./HeroSection";
 import MainMenuSection from "./MainMenuSection";
 import PricingSection from "./PricingSection";
@@ -12,6 +13,7 @@ export default function Section() {
 			<WorkflowSection />
 			<PricingSection />
 			<CTASection />
+			<FooterSection />
 		</main>
 	);
 }

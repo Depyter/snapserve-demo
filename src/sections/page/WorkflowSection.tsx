@@ -48,7 +48,7 @@ type WorkflowStep = (typeof workflowSteps)[number];
 
 function SectionHeader() {
 	return (
-		<header className="mx-auto max-w-[1480px]">
+		<header className="w-full">
 			<h2 className="display-title mt-6 text-5xl font-bold tracking-[-0.06em] text-[#201c1c] md:text-6xl lg:text-7xl">
 				From Table to Kitchen
 			</h2>
@@ -106,6 +106,8 @@ function MobileWorkflowCard({
 export default function WorkflowSection() {
 	const sectionRef = useRef<HTMLElement | null>(null);
 	const copyRef = useRef<HTMLDivElement | null>(null);
+	const stepArrowRefs = useRef<Array<HTMLSpanElement | null>>([]);
+	const stepTitleRefs = useRef<Array<HTMLParagraphElement | null>>([]);
 	const visualRefs = useRef<Array<HTMLDivElement | null>>([]);
 	const activeIndexRef = useRef(0);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -149,7 +151,7 @@ export default function WorkflowSection() {
 					start: "top top",
 					end: `+=${workflowSteps.length * 850}`,
 					pin: true,
-					scrub: 1,
+					scrub: 1.35,
 					onUpdate: (self) => {
 						const nextIndex = Math.min(
 							workflowSteps.length - 1,
@@ -170,6 +172,50 @@ export default function WorkflowSection() {
 			return () => mm.revert();
 		},
 		{ scope: sectionRef },
+	);
+
+	useGSAP(
+		() => {
+			stepArrowRefs.current.forEach((arrow, index) => {
+				if (!arrow) {
+					return;
+				}
+
+				const active = index === activeIndex;
+
+				gsap.to(arrow, {
+					autoAlpha: active ? 1 : 0,
+					x: active ? 0 : -10,
+					scale: active ? 1 : 0.92,
+					duration: active ? 0.34 : 0.22,
+					ease: active ? "power3.out" : "power2.out",
+					overwrite: true,
+				});
+			});
+
+			stepTitleRefs.current.forEach((title, index) => {
+				if (!title) {
+					return;
+				}
+
+				const active = index === activeIndex;
+
+				gsap.to(title, {
+					color: active ? "#1D43DA" : "#9d9692",
+					fontVariationSettings: active ? '"wght" 780' : '"wght" 560',
+					letterSpacing: active ? "-0.06em" : "-0.04em",
+					y: active ? 0 : 8,
+					scale: active ? 1 : 0.985,
+					duration: active ? 0.44 : 0.28,
+					ease: active ? "power3.out" : "power2.out",
+					overwrite: true,
+				});
+			});
+		},
+		{
+			scope: sectionRef,
+			dependencies: [activeIndex],
+		},
 	);
 
 	useGSAP(
@@ -195,7 +241,7 @@ export default function WorkflowSection() {
 		<section className="bg-[#f5f2ed] px-4 py-20 text-[#201c1c] sm:px-6 lg:px-8">
 			<SectionHeader />
 
-			<div className="mx-auto mt-14 max-w-[1480px] lg:hidden">
+			<div className="mt-14 w-full lg:hidden">
 				<div className="space-y-5">
 					{workflowSteps.map((step, index) => (
 						<MobileWorkflowCard key={step.id} step={step} index={index} />
@@ -203,12 +249,9 @@ export default function WorkflowSection() {
 				</div>
 			</div>
 
-			<div
-				ref={sectionRef}
-				className="mx-auto mt-14 hidden max-w-[1480px] lg:block"
-			>
-				<div className="grid min-h-screen grid-cols-[0.86fr_1.14fr] gap-10 border-y border-[#201c1c]/18">
-					<aside className="flex min-h-screen flex-col border-r border-[#201c1c]/18 py-8 pr-8">
+			<div ref={sectionRef} className="mt-14 hidden w-full lg:block">
+				<div className="grid min-h-screen grid-cols-[0.86fr_1.14fr] border-y border-[#201c1c]/18">
+					<aside className="flex min-h-screen flex-col border-r border-[#201c1c]/18 py-8 pr-8 xl:pr-10">
 						<div className="space-y-6">
 							{workflowSteps.map((step, index) => {
 								const active = index === activeIndex;
@@ -224,17 +267,25 @@ export default function WorkflowSection() {
 										<p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-current/60">
 											{String(index + 1).padStart(2, "0")}
 										</p>
-										<p
-											className={[
-												"mt-2 text-5xl leading-[0.92] xl:text-7xl",
-												active
-													? "display-title font-bold tracking-[-0.05em]"
-													: "font-semibold tracking-[-0.08em]",
-											].join(" ")}
-										>
-											{active ? "→ " : null}
-											{step.title}
-										</p>
+										<div className="mt-2 grid grid-cols-[2.75rem_1fr] items-start gap-2 xl:grid-cols-[3.25rem_1fr]">
+											<span
+												ref={(el) => {
+													stepArrowRefs.current[index] = el;
+												}}
+												aria-hidden="true"
+												className="display-title pt-0.5 text-[2.4rem] leading-none text-[#1D43DA] opacity-0 xl:text-[2.9rem]"
+											>
+												&rarr;
+											</span>
+											<p
+												ref={(el) => {
+													stepTitleRefs.current[index] = el;
+												}}
+												className="display-title text-4xl leading-[0.94] text-[#9d9692] xl:text-6xl"
+											>
+												{step.title}
+											</p>
+										</div>
 									</div>
 								);
 							})}
@@ -248,7 +299,7 @@ export default function WorkflowSection() {
 							<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1D43DA]">
 								{activeStep.eyebrow}
 							</p>
-							<h3 className="display-title mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.05em] text-[#201c1c] xl:text-5xl">
+							<h3 className="display-title mt-4 text-3xl font-bold leading-[1.04] tracking-[-0.04em] text-[#201c1c] xl:text-[2.7rem]">
 								{activeStep.heading}
 							</h3>
 							<p className="mt-5 max-w-md text-lg leading-8 tracking-[-0.03em] text-[#4f4946]">
@@ -264,7 +315,7 @@ export default function WorkflowSection() {
 						</div>
 					</aside>
 
-					<div className="relative flex min-h-screen items-center py-8 pl-2">
+					<div className="relative flex min-h-screen items-center">
 						{workflowSteps.map((step, index) => (
 							<div
 								key={step.id}

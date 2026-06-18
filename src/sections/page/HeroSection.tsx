@@ -15,8 +15,11 @@ export default function HeroSection() {
 					</p>
 					<button
 						type="button"
-						className="mt-8 rounded-full bg-[#1D43DA] px-6 py-3 text-sm font-semibold tracking-[0.08em] text-white uppercase shadow-[0_18px_40px_rgba(29,67,218,0.22)] transition hover:-translate-y-0.5 hover:bg-[#1533ac]"
+						className="group mt-8 inline-flex items-center gap-3 rounded-full border border-[#1D43DA] bg-white px-4 py-3 pr-6 text-sm font-semibold tracking-[0.14em] text-[#1D43DA] uppercase transition hover:bg-[#1D43DA] hover:text-white"
 					>
+						<span className="display-title flex h-9 w-9 items-center justify-center rounded-full bg-[#1D43DA] text-lg font-bold normal-case text-white transition group-hover:bg-white group-hover:text-[#1D43DA]">
+							→
+						</span>
 						Request a Demo
 					</button>
 				</div>

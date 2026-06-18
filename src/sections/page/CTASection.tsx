@@ -1,80 +1,92 @@
+const setupSteps = [
+	{
+		number: "01",
+		title: "Choose a plan",
+		description: "Pick the SnapServe tier that matches your restaurant.",
+	},
+	{
+		number: "02",
+		title: "Send your menu",
+		description: "Share your dishes, tables, and service details with us.",
+	},
+	{
+		number: "03",
+		title: "We prepare the system",
+		description:
+			"We'll prepare your QR menu, ordering dashboard, waiter view, and kitchen queue.",
+	},
+];
+
+function StepLine({
+	number,
+	title,
+	description,
+}: {
+	number: string;
+	title: string;
+	description: string;
+}) {
+	return (
+		<div className="relative grid grid-cols-[2.75rem_1fr] gap-3 sm:grid-cols-[3rem_1fr] sm:gap-4">
+			<div className="flex justify-center">
+				<div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1D43DA]/22 text-[10px] font-semibold tracking-[0.28em] text-[#1D43DA] sm:h-12 sm:w-12">
+					{number}
+				</div>
+			</div>
+			<div className="pt-1.5 sm:pt-2">
+				<p className="display-title text-[1.65rem] font-bold leading-none text-[#201c1c] sm:text-2xl">
+					{title}
+				</p>
+				<p className="mt-3 max-w-sm text-sm leading-7 text-[#4f4946]">
+					{description}
+				</p>
+			</div>
+		</div>
+	);
+}
+
 export default function CTASection() {
 	return (
-		<section className="receipt-sans bg-[#7f8f54] px-4 py-20 text-[#253947] sm:px-6">
-			<div className="mx-auto max-w-[760px] bg-[#f1d89e] p-6 shadow-[0_18px_60px_rgba(35,25,15,0.28)] ring-1 ring-[#8f7642]">
-				<div className="relative border-2 border-[#253947] bg-[#f3dda9]/80 p-6">
-					<div className="grid gap-8 md:grid-cols-[1fr_220px]">
-						<div>
-							<p className="text-[10px] font-bold uppercase tracking-[0.34em] text-[#7b3330]">
-								Service Authorization
-							</p>
+		<section className="bg-[#f5f2ed] px-4 py-24 text-[#201c1c] sm:px-6 lg:px-8">
+			<div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-[1fr_420px] md:items-center">
+				<div className="max-w-3xl">
+					<p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-[#1D43DA]">
+						Next Step
+					</p>
 
-							<h2 className="receipt-serif mt-3 text-4xl font-black leading-none text-[#204b63]">
-								Start serving orders without the paper trail.
-							</h2>
+					<h2 className="display-title mt-5 max-w-3xl text-5xl font-bold leading-[0.95] tracking-[-0.06em] text-[#201c1c] md:text-7xl">
+						Set up your restaurant&apos;s ordering flow.
+					</h2>
 
-							<p className="mt-4 max-w-xl text-sm leading-7 text-[#253947]/80">
-								Get your QR menu, ordering flow, kitchen view, and restaurant
-								dashboard set up for your business. Choose a plan, send your
-								menu, and we&apos;ll help prepare your SnapServe system for your
-								restaurant.
-							</p>
-
-							<div className="mt-6 grid gap-3 text-[11px] font-bold uppercase tracking-[0.18em] md:grid-cols-3">
-								<div className="border border-[#253947] px-3 py-3">
-									<p className="text-[#7b3330]">Step 01</p>
-									<p className="mt-1">Pick Plan</p>
-								</div>
-
-								<div className="border border-[#253947] px-3 py-3">
-									<p className="text-[#7b3330]">Step 02</p>
-									<p className="mt-1">Send Menu</p>
-								</div>
-
-								<div className="border border-[#253947] px-3 py-3">
-									<p className="text-[#7b3330]">Step 03</p>
-									<p className="mt-1">Go Live</p>
-								</div>
-							</div>
-						</div>
-
-						<div className="flex flex-col justify-between border-2 border-[#253947] bg-[#f8e8bb] p-4 text-center">
-							<div>
-								<p className="text-[10px] font-bold uppercase tracking-[0.28em]">
-									Approved For
-								</p>
-
-								<p className="receipt-serif mt-3 text-3xl font-black text-[#b54338]">
-									Setup
-								</p>
-
-								<p className="receipt-mono mt-2 text-[11px] uppercase tracking-[0.12em]">
-									SnapServe Restaurant System
-								</p>
-							</div>
-
-							<a
-								href="#contact"
-								className="mt-8 border-2 border-[#253947] bg-[#253947] px-4 py-3 text-[11px] font-bold uppercase tracking-[0.24em] text-[#f3dda9] transition hover:bg-[#b54338]"
-							>
-								Request Setup
-							</a>
-						</div>
+					<div className="mt-9 flex flex-wrap gap-3">
+						<a
+							href="#faq"
+							className="inline-flex items-center gap-3 rounded-full border border-[#1D43DA]/32 bg-white px-4 py-3 pr-6 text-sm font-semibold uppercase tracking-[0.18em] text-[#201c1c] transition hover:border-[#1D43DA] hover:text-[#1D43DA]"
+						>
+							<span className="display-title flex h-8 w-8 items-center justify-center rounded-full border border-[#1D43DA]/24 text-sm font-bold text-[#1D43DA]">
+								→
+							</span>
+							Ask a Question
+						</a>
 					</div>
+				</div>
 
-					<div className="mt-8 grid gap-6 border-t-2 border-[#253947] pt-6 md:grid-cols-2">
-						<div>
-							<div className="mb-2 border-b border-[#253947]" />
-							<p className="text-[10px] font-bold uppercase tracking-[0.26em]">
-								Restaurant Representative
-							</p>
-						</div>
+				<div className="w-full md:pl-4">
+					<p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#1D43DA]">
+						Setup Flow
+					</p>
 
-						<div>
-							<div className="mb-2 border-b border-[#253947]" />
-							<p className="text-[10px] font-bold uppercase tracking-[0.26em]">
-								Cube Tech Innovations
-							</p>
+					<div className="relative mt-8">
+						<div className="absolute top-4 bottom-4 left-6 w-px bg-[#1D43DA]/18" />
+						<div className="space-y-8">
+							{setupSteps.map((step) => (
+								<StepLine
+									key={step.number}
+									number={step.number}
+									title={step.title}
+									description={step.description}
+								/>
+							))}
 						</div>
 					</div>
 				</div>

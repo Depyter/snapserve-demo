@@ -27,7 +27,7 @@ export default function MainMenuSection() {
 							Cube Tech Innovations
 						</p>
 						<div className="mx-auto mt-4 h-px w-16 bg-[#291F1E]" />
-						<h2 className="display-title mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
+						<h2 className="display-title mt-5 text-4xl font-bold tracking-tight text-[#291F1E] sm:text-6xl">
 							Main Menu
 						</h2>
 						<p className="mx-auto mt-4 max-w-xl text-sm uppercase tracking-[0.18em] text-[#291F1E]/78">
