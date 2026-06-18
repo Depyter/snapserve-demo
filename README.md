@@ -1,232 +1,186 @@
-Welcome to your new TanStack Start app! 
+# SnapServe
 
-# Getting Started
+SnapServe is a landing page and product presentation for a restaurant ordering system. The current site is built as a section-based experience: a clean hero, a vintage menu-style overview, an editorial workflow section, a Philippine receipt-inspired pricing section, and a stamped CTA block.
 
-To run this application:
+## Why This Tech Stack
+
+### React 19 + TanStack Start
+
+The app uses `@tanstack/react-start` with file-based routing from TanStack Router. That stack was a good fit because:
+
+- It keeps the project in a React-first workflow.
+- It supports route-based composition cleanly without forcing a heavy app framework.
+- It works well with Vite and Cloudflare deployment.
+- It makes the home page easy to break into reusable section components under `src/sections/page/`.
+
+### TypeScript
+
+TypeScript is used to keep UI state and component contracts explicit. That matters here because the landing page has interactive pieces like the pinned workflow section and the pricing selector, and those are easier to maintain when the data structures are typed.
+
+### Tailwind CSS v4
+
+Tailwind was chosen for layout and styling speed. The page has several very different visual modes, and utility-driven styling makes it easier to:
+
+- move quickly between ideas,
+- keep spacing and responsiveness consistent,
+- build highly custom section designs without creating a large custom CSS surface.
+
+Global design tokens and font imports still live in `src/styles.css`, so Tailwind is being used as a flexible rendering layer rather than as the only design system.
+
+### GSAP + ScrollTrigger
+
+The workflow section uses `gsap`, `@gsap/react`, and `ScrollTrigger`. That choice was intentional because the section is not just animated decoration; it behaves like a pinned editorial scroll story.
+
+GSAP was chosen over simpler CSS-only motion because it handles:
+
+- section pinning,
+- scroll-linked state changes,
+- controlled transitions between screenshots,
+- responsive cleanup in React through `useGSAP`.
+
+### Fontsource
+
+Fonts are loaded locally through `@fontsource` instead of external font CDNs.
+
+- `Averia Serif Libre` is used as the display/accent serif.
+- `Montserrat` is used for the main sans/body typography.
+
+This keeps typography consistent and avoids runtime dependency on external font requests.
+
+### Cloudflare Workers + Wrangler
+
+The app is set up to deploy through the Cloudflare Vite plugin and Wrangler. That keeps the deployment target lightweight and close to the Vite build pipeline already used during development.
+
+### Biome
+
+Biome handles linting and formatting. It keeps the codebase strict without adding a large ESLint/Prettier setup.
+
+## Design Decisions
+
+The design direction is intentionally mixed rather than uniform. Each section has a different job, so each section is allowed to use a different visual language.
+
+### 1. Hero: Clean Product Introduction
+
+The hero is the simplest part of the page:
+
+- large `SnapServe` wordmark,
+- short value proposition,
+- one clear CTA,
+- real product screenshot instead of a fake UI reconstruction.
+
+The goal is to answer what the product is immediately and show the real interface as early as possible.
+
+### 2. Main Menu: Vintage Restaurant Print
+
+The main menu section uses an olive and paper palette with editorial restaurant-menu styling. That decision ties the brand to hospitality without making the entire site look nostalgic.
+
+It works as a thematic bridge between:
+
+- the modern product sections,
+- and the more tactile pricing/CTA sections.
+
+### 3. Workflow: Modern Editorial Scroll Story
+
+The workflow section deliberately breaks from the vintage menu style.
+
+Instead of another card grid, it behaves like an editorial product chapter:
+
+- the left rail is the workflow navigation,
+- the active state is the source of truth,
+- the content pins on desktop,
+- the right side shows the actual product view for each step.
+
+This was chosen because the workflow is better understood as a sequence:
+
+`Table QR -> Waiter View -> Kitchen View -> Owner Dashboard`
+
+That is clearer than presenting the same information as four unrelated feature cards.
+
+### 4. Pricing: Philippine Official Receipt
+
+The pricing section is intentionally styled like a Philippine receipt/service invoice rather than a standard SaaS pricing table.
+
+That decision does two things:
+
+- It makes the section distinct and memorable.
+- It frames pricing as something operational and business-facing, which fits the restaurant audience better than a generic startup card grid.
+
+The selector on the left is intentionally minimal now, so the receipt on the right remains the main visual object.
+
+### 5. CTA: Service Authorization Slip
+
+The CTA continues the pricing language and feels like the “next official step” after the receipt. Instead of switching back to a generic centered button section, it uses an approval/service-authorization treatment.
+
+That keeps the lower part of the page coherent:
+
+- pricing feels like billing,
+- CTA feels like approval/setup.
+
+### 6. Typography Strategy
+
+Typography is split by role:
+
+- `Averia Serif Libre` is used as a display accent.
+- `Montserrat` carries the bulk of UI and body text.
+
+The serif is used where the page needs identity or emphasis, not everywhere. That keeps the site expressive without becoming overly decorative.
+
+### 7. Real Product Assets Over Fake Mockups
+
+Where possible, the page now uses actual screenshots from `public/assets` instead of reconstructed UI blocks. That was the right decision because it makes the product presentation more credible and reduces visual drift between the marketing page and the actual product.
+
+## Project Structure
+
+Important page sections live in:
+
+- `src/sections/page/HeroSection.tsx`
+- `src/sections/page/MainMenuSection.tsx`
+- `src/sections/page/WorkflowSection.tsx`
+- `src/sections/page/PricingSection.tsx`
+- `src/sections/page/CTASection.tsx`
+- `src/sections/page/Section.tsx`
+
+The route entry point is:
+
+- `src/routes/index.tsx`
+
+Global styling and font imports live in:
+
+- `src/styles.css`
+
+## Development
+
+Install dependencies:
 
 ```bash
 bun install
-bun --bun run dev
 ```
 
-# Building For Production
-
-To build this application for production:
+Start the dev server:
 
 ```bash
-bun --bun run build
+bun run dev
 ```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+Build for production:
 
 ```bash
-bun --bun run test
+bun run build
 ```
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `bun install @tailwindcss/vite tailwindcss -D`
-
-## Linting & Formatting
-
-This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
-
+Run linting:
 
 ```bash
-bun --bun run lint
-bun --bun run format
-bun --bun run check
+bun run lint
 ```
 
-
-## Deploy to Cloudflare Workers
-
-This project uses the Cloudflare Vite plugin (configured in `vite.config.ts`) and `wrangler.jsonc`:
-
-1. Install Wrangler: `npm install -g wrangler`
-2. Authenticate: `wrangler login`
-3. Deploy: `npx wrangler deploy`
-
-For production env vars, run `wrangler secret put MY_VAR` for each secret listed in `.env.example`. Public (non-secret) vars go in `wrangler.jsonc` under `vars`.
-
-KV, D1, R2, and Durable Object bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
-
-
-## Setting up Convex
-
-- Set the `VITE_CONVEX_URL` and `CONVEX_DEPLOYMENT` environment variables in your `.env.local`. (Or run `bunx --bun convex init` to set them automatically.)
-- Run `bunx --bun convex dev` to start the Convex server.
-
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+Run tests:
 
 ```bash
-pnpm dlx shadcn@latest add button
+bun run test
 ```
 
+## Notes
 
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+- The repo still includes Convex-related dependencies and starter integrations for future application features, but the current landing page does not depend on Convex for its main UI flow.
+- The homepage design is intentionally section-driven and not yet a full product app shell.
