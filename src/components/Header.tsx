@@ -1,109 +1,194 @@
-import { Link } from "@tanstack/react-router";
-import ThemeToggle from "./ThemeToggle";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
+import LandingButton from "./LandingButton";
+import SiteMenuOverlay from "./SiteMenuOverlay";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+type ActiveSection =
+	| "home"
+	| "features"
+	| "wait-time"
+	| "testimony"
+	| "setup"
+	| "pricing"
+	| "faq"
+	| "footer";
+
+const sectionOrder: ActiveSection[] = [
+	"home",
+	"features",
+	"wait-time",
+	"testimony",
+	"setup",
+	"pricing",
+	"faq",
+	"footer",
+];
+
+const requestDemoButtonClassNames: Record<ActiveSection, string> = {
+	home: "h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-[#fbf8f2] px-3 !text-[#291F1E] hover:!bg-[#f1e9de] hover:!text-[#291F1E] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	features:
+		"h-10 rounded-[1.35rem] border border-transparent !bg-[var(--landing-accent)] px-3 !text-white hover:!bg-[#1739d8] hover:!text-white sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	"wait-time":
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-white px-3 !text-[#201c1c] hover:!bg-[#f2f2f2] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	testimony:
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[var(--landing-card)] px-3 !text-[#201c1c] hover:!bg-[#efe8dd] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	setup:
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[#f5f2ed] px-3 !text-[#201c1c] hover:!bg-[#eee6da] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	pricing:
+		"h-10 rounded-[1.35rem] border border-[rgba(37,57,71,0.22)] !bg-[var(--receipt-bg)] px-3 !text-[#201c1c] hover:!bg-[#738446] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	faq: "h-10 rounded-[1.35rem] border border-[rgba(248,239,216,0.24)] !bg-[#735544] px-3 !text-[#f8efd8] hover:!bg-[#654739] hover:!text-[#f8efd8] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+	footer:
+		"h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-white px-3 !text-[#291F1E] hover:!bg-[#f5f2ed] hover:!text-[#291F1E] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+};
 
 export default function Header() {
+	const headerRef = useRef<HTMLElement | null>(null);
+	const chromeRefs = useRef<Array<HTMLElement | null>>([]);
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [activeSection, setActiveSection] = useState<ActiveSection>("home");
+
+	useEffect(() => {
+		let animationFrame = 0;
+
+		const updateActiveSection = () => {
+			const marker = window.innerHeight * 0.28;
+			let nextSection: ActiveSection = "home";
+
+			for (const sectionId of sectionOrder) {
+				const element = document.getElementById(sectionId);
+				if (!element) {
+					continue;
+				}
+
+				const { top } = element.getBoundingClientRect();
+				if (top <= marker) {
+					nextSection = sectionId;
+				}
+			}
+
+			setActiveSection(nextSection);
+		};
+
+		const requestUpdate = () => {
+			if (animationFrame !== 0) {
+				return;
+			}
+
+			animationFrame = window.requestAnimationFrame(() => {
+				animationFrame = 0;
+				updateActiveSection();
+			});
+		};
+
+		updateActiveSection();
+		window.addEventListener("scroll", requestUpdate, { passive: true });
+		window.addEventListener("resize", requestUpdate);
+
+		return () => {
+			window.removeEventListener("scroll", requestUpdate);
+			window.removeEventListener("resize", requestUpdate);
+
+			if (animationFrame !== 0) {
+				window.cancelAnimationFrame(animationFrame);
+			}
+		};
+	}, []);
+
+	useGSAP(
+		() => {
+			const chrome = chromeRefs.current.filter(Boolean) as HTMLElement[];
+
+			if (chrome.length === 0) {
+				return;
+			}
+
+			const showChrome = () => {
+				gsap.to(chrome, {
+					autoAlpha: 1,
+					duration: 0.38,
+					ease: "power2.out",
+					overwrite: true,
+				});
+			};
+
+			const hideChrome = () => {
+				gsap.to(chrome, {
+					autoAlpha: 0,
+					duration: 0.28,
+					ease: "power2.out",
+					overwrite: true,
+				});
+			};
+
+			gsap.set(chrome, {
+				autoAlpha: window.scrollY > 24 ? 0 : 1,
+			});
+
+			const trigger = ScrollTrigger.create({
+				start: 24,
+				end: "max",
+				onEnter: hideChrome,
+				onLeaveBack: showChrome,
+			});
+
+			return () => {
+				trigger.kill();
+			};
+		},
+		{ scope: headerRef },
+	);
+
 	return (
-		<header className="sticky top-0 z-50 border-b border-[var(--line)] bg-[var(--header-bg)] px-4 backdrop-blur-lg">
-			<nav className="page-wrap flex flex-wrap items-center gap-x-3 gap-y-2 py-3 sm:py-4">
-				<h2 className="m-0 flex-shrink-0 text-base font-semibold tracking-tight">
-					<Link
-						to="/"
-						className="inline-flex items-center gap-2 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm text-[var(--sea-ink)] no-underline shadow-[0_8px_24px_rgba(30,90,72,0.08)] sm:px-4 sm:py-2"
-					>
-						<span className="h-2 w-2 rounded-full bg-[linear-gradient(90deg,#56c6be,#7ed3bf)]" />
-						TanStack Start
-					</Link>
-				</h2>
+		<header
+			ref={headerRef}
+			className="fixed inset-x-0 top-0 z-50 bg-transparent"
+		>
+			<div className="mx-auto flex max-w-[116rem] items-center justify-between gap-3 px-4 py-2 sm:gap-4 sm:px-6 lg:px-8">
+				<a
+					href="#home"
+					ref={(element) => {
+						chromeRefs.current[0] = element;
+					}}
+					className="inline-flex items-center no-underline"
+					aria-label="SnapServe home"
+				>
+					<span className="display-title text-[1.75rem] font-bold leading-[0.84] tracking-[-0.05em] text-[#291F1E] sm:text-[2rem]">
+						SnapServe
+					</span>
+				</a>
 
-				<div className="order-3 flex w-full flex-wrap items-center gap-x-4 gap-y-1 pb-1 text-sm font-semibold sm:order-none sm:w-auto sm:flex-nowrap sm:pb-0">
-					<Link
-						to="/"
-						className="nav-link"
-						activeProps={{ className: "nav-link is-active" }}
+				<div className="flex items-center gap-1.5 sm:gap-2.5">
+					<button
+						ref={(element) => {
+							chromeRefs.current[1] = element;
+						}}
+						type="button"
+						aria-label={menuOpen ? "Close main menu" : "Open main menu"}
+						aria-haspopup="dialog"
+						aria-controls="main-menu"
+						aria-expanded={menuOpen}
+						onClick={() => setMenuOpen((value) => !value)}
+						className="inline-flex h-10 items-center justify-center rounded-[1.35rem] bg-[var(--landing-bg)]/92 px-3 text-[0.68rem] font-semibold tracking-[0.08em] text-[#291F1E] transition hover:bg-[var(--landing-bg)] hover:text-[var(--landing-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#291F1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]"
 					>
-						Home
-					</Link>
-					<Link
-						to="/about"
-						className="nav-link"
-						activeProps={{ className: "nav-link is-active" }}
+						Main Menu
+					</button>
+
+					<LandingButton
+						href="#setup"
+						tone="surface"
+						size="sm"
+						showIcon={false}
+						className={requestDemoButtonClassNames[activeSection]}
 					>
-						About
-					</Link>
-					<a
-						href="https://tanstack.com/start/latest/docs/framework/react/overview"
-						className="nav-link"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Docs
-					</a>
-					<details className="relative w-full sm:w-auto">
-						<summary className="nav-link list-none cursor-pointer">
-							Demos
-						</summary>
-						<div className="mt-2 min-w-56 rounded-xl border border-[var(--line)] bg-[var(--header-bg)] p-2 shadow-lg sm:absolute sm:right-0">
-							<a
-								href="/demo/convex"
-								className="block rounded-lg px-3 py-2 text-sm text-[var(--sea-ink-soft)] no-underline transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)]"
-							>
-								Convex
-							</a>
-							<a
-								href="/demo/form/simple"
-								className="block rounded-lg px-3 py-2 text-sm text-[var(--sea-ink-soft)] no-underline transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)]"
-							>
-								Simple Form
-							</a>
-							<a
-								href="/demo/form/address"
-								className="block rounded-lg px-3 py-2 text-sm text-[var(--sea-ink-soft)] no-underline transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)]"
-							>
-								Address Form
-							</a>
-							<a
-								href="/demo/tanstack-query"
-								className="block rounded-lg px-3 py-2 text-sm text-[var(--sea-ink-soft)] no-underline transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)]"
-							>
-								TanStack Query
-							</a>
-						</div>
-					</details>
+						Request a Demo
+					</LandingButton>
 				</div>
-
-				<div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-					<a
-						href="https://x.com/tan_stack"
-						target="_blank"
-						rel="noreferrer"
-						className="hidden rounded-xl p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)] sm:block"
-					>
-						<span className="sr-only">Follow TanStack on X</span>
-						<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24">
-							<path
-								fill="currentColor"
-								d="M12.6 1h2.2L10 6.48 15.64 15h-4.41L7.78 9.82 3.23 15H1l5.14-5.84L.72 1h4.52l3.12 4.73L12.6 1zm-.77 12.67h1.22L4.57 2.26H3.26l8.57 11.41z"
-							/>
-						</svg>
-					</a>
-					<a
-						href="https://github.com/TanStack"
-						target="_blank"
-						rel="noreferrer"
-						className="hidden rounded-xl p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)] sm:block"
-					>
-						<span className="sr-only">Go to TanStack GitHub</span>
-						<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24">
-							<path
-								fill="currentColor"
-								d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-							/>
-						</svg>
-					</a>
-
-					<ThemeToggle />
-				</div>
-			</nav>
+			</div>
+			<SiteMenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
 		</header>
 	);
 }

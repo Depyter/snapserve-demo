@@ -1,6 +1,6 @@
 # SnapServe
 
-SnapServe is a landing page and product presentation for a restaurant ordering system. The current site is built as a section-based experience: a clean hero, a vintage menu-style overview, an editorial workflow section, a Philippine receipt-inspired pricing section, and a stamped CTA block.
+SnapServe is a landing page and product presentation for a restaurant ordering system. The current site is built as a section-based experience: a clean hero, a vintage menu-style overview, a features section with product screenshots, a Philippine receipt-inspired pricing section, and a stamped CTA block.
 
 ## Why This Tech Stack
 
@@ -15,7 +15,7 @@ The app uses `@tanstack/react-start` with file-based routing from TanStack Route
 
 ### TypeScript
 
-TypeScript is used to keep UI state and component contracts explicit. That matters here because the landing page has interactive pieces like the pinned workflow section and the pricing selector, and those are easier to maintain when the data structures are typed.
+TypeScript is used to keep UI state and component contracts explicit. That matters here because the landing page has interactive pieces like the pinned features section and the pricing selector, and those are easier to maintain when the data structures are typed.
 
 ### Tailwind CSS v4
 
@@ -29,7 +29,7 @@ Global design tokens and font imports still live in `src/styles.css`, so Tailwin
 
 ### GSAP + ScrollTrigger
 
-The workflow section uses `gsap`, `@gsap/react`, and `ScrollTrigger`. That choice was intentional because the section is not just animated decoration; it behaves like a pinned editorial scroll story.
+The features section uses `gsap`, `@gsap/react`, and `ScrollTrigger`. That choice was intentional because the section is not just animated decoration; it behaves like a pinned editorial scroll story.
 
 GSAP was chosen over simpler CSS-only motion because it handles:
 
@@ -79,22 +79,18 @@ It works as a thematic bridge between:
 - the modern product sections,
 - and the more tactile pricing/CTA sections.
 
-### 3. Workflow: Modern Editorial Scroll Story
+### 3. Features: Product Story with Screenshots
 
-The workflow section deliberately breaks from the vintage menu style.
+The features section deliberately breaks from the vintage menu style.
 
-Instead of another card grid, it behaves like an editorial product chapter:
+Instead of another static feature grid, it behaves like an editorial product chapter:
 
-- the left rail is the workflow navigation,
+- the left rail introduces the benefit story,
 - the active state is the source of truth,
 - the content pins on desktop,
-- the right side shows the actual product view for each step.
+- the right side shows the actual product screenshots alongside the benefit copy.
 
-This was chosen because the workflow is better understood as a sequence:
-
-`Table QR -> Waiter View -> Kitchen View -> Owner Dashboard`
-
-That is clearer than presenting the same information as four unrelated feature cards.
+That keeps the restaurant ordering flow visible without making it a separate chapter.
 
 ### 4. Pricing: Philippine Official Receipt
 
@@ -135,7 +131,7 @@ Important page sections live in:
 
 - `src/sections/page/HeroSection.tsx`
 - `src/sections/page/MainMenuSection.tsx`
-- `src/sections/page/WorkflowSection.tsx`
+- `src/sections/page/FeaturesSection.tsx`
 - `src/sections/page/PricingSection.tsx`
 - `src/sections/page/CTASection.tsx`
 - `src/sections/page/Section.tsx`

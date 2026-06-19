@@ -1,36 +1,39 @@
 export default function HeroSection() {
 	return (
-		<section className="min-h-[100svh] px-4 py-12 sm:px-6 sm:py-16">
-			<div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-16">
-				<div className="max-w-xl text-center lg:text-left">
-					<h1 className="display-title text-6xl font-bold tracking-tight text-[#1D43DA] sm:text-8xl md:text-[8.5rem]">
-						SnapServe
-					</h1>
-					<p className="mt-6 text-balance text-3xl leading-[0.98] font-semibold tracking-[-0.03em] text-[#291F1E] sm:text-4xl md:text-[3.4rem]">
-						scan to order.
-						<br />
-						run better
-						<br />
-						restaurants.
-					</p>
-					<button
-						type="button"
-						className="group mt-8 inline-flex items-center gap-3 rounded-full border border-[#1D43DA] bg-white px-4 py-3 pr-6 text-sm font-semibold tracking-[0.14em] text-[#1D43DA] uppercase transition hover:bg-[#1D43DA] hover:text-white"
-					>
-						<span className="display-title flex h-9 w-9 items-center justify-center rounded-full bg-[#1D43DA] text-lg font-bold normal-case text-white transition group-hover:bg-white group-hover:text-[#1D43DA]">
-							→
-						</span>
-						Request a Demo
-					</button>
-				</div>
+		<section
+			id="home"
+			className="relative isolate overflow-hidden bg-[#fbf8f2]"
+		>
+			<video
+				autoPlay
+				disablePictureInPicture
+				loop
+				muted
+				playsInline
+				preload="auto"
+				poster="/assets/hero.png"
+				tabIndex={-1}
+				className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-[0.34] saturate-[0.82]"
+			>
+				<source src="/assets/background.mp4" type="video/mp4" />
+			</video>
 
-				<div className="relative mx-auto w-full max-w-[22rem]">
-					<div className="pointer-events-none absolute inset-x-6 bottom-2 h-16 rounded-full bg-[radial-gradient(circle,rgba(29,67,218,0.14),transparent_72%)] blur-2xl" />
-					<img
-						src="/assets/hero.png"
-						alt="SnapServe mobile ordering interface"
-						className="relative w-full rounded-[2.4rem] shadow-[0_30px_80px_rgba(24,28,40,0.16)]"
-					/>
+			<div
+				className="pointer-events-none absolute inset-0"
+				style={{
+					background:
+						"linear-gradient(180deg, rgba(126, 143, 78, 0.28), rgba(126, 143, 78, 0.14))",
+				}}
+			/>
+			<div className="relative mx-auto flex min-h-[100svh] max-w-6xl items-center justify-center px-4 py-16 sm:px-6">
+				<div className="flex w-full max-w-4xl flex-col items-center justify-center text-center">
+					<h1 className="display-title max-w-[10ch] text-balance text-[clamp(2rem,6.5vw,4.6rem)] font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
+						Scan to order.
+					</h1>
+
+					<p className="display-title mt-3 max-w-[14ch] text-balance text-[clamp(2rem,6.5vw,4.6rem)] font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
+						Run better restaurants.
+					</p>
 				</div>
 			</div>
 		</section>

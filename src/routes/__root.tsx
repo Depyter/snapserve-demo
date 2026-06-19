@@ -6,8 +6,8 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-// import Footer from "../components/Footer";
-// import Header from "../components/Header";
+import { lazy, type ReactNode, Suspense } from "react";
+import OliveLoadingScreen from "../components/OliveLoadingScreen";
 import ConvexProvider from "../integrations/convex/provider";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
@@ -15,6 +15,8 @@ import appCss from "../styles.css?url";
 interface MyRouterContext {
 	queryClient: QueryClient;
 }
+
+const Header = lazy(() => import("../components/Header"));
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
@@ -40,7 +42,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	shellComponent: RootDocument,
 });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
@@ -48,8 +50,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
 				<ConvexProvider>
-					{/*<Header />*/}
-					{children}
+					<Suspense fallback={<OliveLoadingScreen />}>
+						<Header />
+						{children}
+					</Suspense>
 					{/*<Footer />*/}
 					<TanStackDevtools
 						config={{
