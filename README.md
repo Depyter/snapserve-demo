@@ -182,5 +182,4 @@ bun run test
 
 ## Notes
 
-- The repo still includes Convex-related dependencies and starter integrations for future application features, but the current landing page does not depend on Convex for its main UI flow.
 - The homepage is intentionally section-driven and composed directly from route-mounted sections rather than a separate app shell.
