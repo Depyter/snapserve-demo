@@ -6,8 +6,6 @@ import {
 	faqSectionTitleClassName,
 } from "./mobileTypeScale";
 
-gsap.registerPlugin(useGSAP);
-
 const faqItems = [
 	{
 		id: "setup",

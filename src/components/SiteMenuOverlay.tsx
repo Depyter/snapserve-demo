@@ -5,8 +5,6 @@ import { createPortal } from "react-dom";
 import { cn } from "#/lib/utils.ts";
 import { mainMenuItems } from "#/sections/page/siteNavigation";
 
-gsap.registerPlugin(useGSAP);
-
 type SiteMenuOverlayProps = {
 	open: boolean;
 	onClose: () => void;

@@ -1,8 +1,8 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 import LandingButton from "#/components/LandingButton";
+import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 import {
 	faqAnswerTextClassName,
 	faqQuestionTitleClassName,
@@ -10,8 +10,6 @@ import {
 	mobileEyebrowTextClassName,
 	mobileSectionTitleClassName,
 } from "./mobileTypeScale";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type SetupStep = {
 	id: string;
@@ -124,6 +122,8 @@ export default function CTASection() {
 
 	useGSAP(
 		() => {
+			ensureScrollTriggerRegistered();
+
 			const mm = gsap.matchMedia();
 
 			mm.add("(min-width: 1024px)", () => {

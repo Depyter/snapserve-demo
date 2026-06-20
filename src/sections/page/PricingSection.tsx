@@ -3,8 +3,6 @@ import gsap from "gsap";
 import { useMemo, useRef, useState } from "react";
 import { useShellReveal } from "./sectionShellMotion";
 
-gsap.registerPlugin(useGSAP);
-
 type TierId = "basic" | "premium" | "pro";
 
 type Tier = {

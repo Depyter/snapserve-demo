@@ -2,10 +2,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 import LandingButton from "./LandingButton";
 import SiteMenuOverlay from "./SiteMenuOverlay";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type ActiveSection =
 	| "home"
@@ -100,6 +99,8 @@ export default function Header() {
 
 	useGSAP(
 		(_context, contextSafe) => {
+			ensureScrollTriggerRegistered();
+
 			const chrome = chromeRefs.current.filter(Boolean) as HTMLElement[];
 			const faqSection = document.getElementById("faq");
 

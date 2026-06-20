@@ -1,13 +1,11 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 import {
 	faqSectionTitleClassName,
 	mobileEyebrowTextClassName,
 } from "./mobileTypeScale";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type WaitTimeMetric = {
 	label: string;
@@ -65,6 +63,8 @@ export default function WaitTimeSection() {
 
 	useGSAP(
 		() => {
+			ensureScrollTriggerRegistered();
+
 			const mm = gsap.matchMedia();
 
 			mm.add("(min-width: 1024px)", () => {

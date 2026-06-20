@@ -1,9 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { RefObject } from "react";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 
 const INSET = "1.5rem";
 const RADIUS = "2.5rem";
@@ -11,6 +9,8 @@ const RADIUS = "2.5rem";
 export function useShellReveal(scopeRef: RefObject<HTMLElement | null>) {
 	useGSAP(
 		() => {
+			ensureScrollTriggerRegistered();
+
 			const scope = scopeRef.current;
 			if (!scope) return;
 

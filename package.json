@@ -1,5 +1,5 @@
 {
-  "name": "snapserve",
+  "name": "snapserve-demo",
   "private": true,
   "type": "module",
   "imports": {
