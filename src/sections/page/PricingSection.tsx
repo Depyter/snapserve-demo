@@ -1,7 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useMemo, useRef, useState } from "react";
-import { useShellReveal } from "./sectionShellMotion";
+import { useShellReveal } from "#/lib/sections/sectionShellMotion";
 
 type TierId = "basic" | "premium" | "pro";
 

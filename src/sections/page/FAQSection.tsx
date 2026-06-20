@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import {
 	faqQuestionTitleClassName,
 	faqSectionTitleClassName,
-} from "./mobileTypeScale";
+} from "#/lib/sections/mobileTypeScale";
 
 const faqItems = [
 	{

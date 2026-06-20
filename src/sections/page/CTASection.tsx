@@ -9,7 +9,7 @@ import {
 	mobileBodyCopyClassName,
 	mobileEyebrowTextClassName,
 	mobileSectionTitleClassName,
-} from "./mobileTypeScale";
+} from "#/lib/sections/mobileTypeScale";
 
 type SetupStep = {
 	id: string;

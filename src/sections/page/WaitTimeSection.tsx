@@ -5,7 +5,7 @@ import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 import {
 	faqSectionTitleClassName,
 	mobileEyebrowTextClassName,
-} from "./mobileTypeScale";
+} from "#/lib/sections/mobileTypeScale";
 
 type WaitTimeMetric = {
 	label: string;

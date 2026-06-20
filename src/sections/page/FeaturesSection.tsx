@@ -4,8 +4,8 @@ import {
 	faqSectionTitleClassName,
 	mobileBodyCopyClassName,
 	mobileFeatureTitleClassName,
-} from "./mobileTypeScale";
-import { useShellReveal } from "./sectionShellMotion";
+} from "#/lib/sections/mobileTypeScale";
+import { useShellReveal } from "#/lib/sections/sectionShellMotion";
 
 type FeatureItem = {
 	title: string;

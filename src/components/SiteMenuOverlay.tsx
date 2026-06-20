@@ -2,7 +2,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { type MouseEvent, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { mainMenuItems } from "#/sections/page/siteNavigation";
+import { mainMenuItems } from "#/lib/sections/siteNavigation";
 
 type SiteMenuOverlayProps = {
 	open: boolean;

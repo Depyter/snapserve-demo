@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { faqSectionTitleClassName } from "./mobileTypeScale";
+import { faqSectionTitleClassName } from "#/lib/sections/mobileTypeScale";
 
 type Testimonial = {
 	quote: string;

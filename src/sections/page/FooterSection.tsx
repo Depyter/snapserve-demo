@@ -1,5 +1,5 @@
 import { Facebook, Instagram, Linkedin, type LucideIcon } from "lucide-react";
-import { footerSectionLinks } from "./siteNavigation";
+import { footerSectionLinks } from "#/lib/sections/siteNavigation";
 
 type FooterLink = {
 	label: string;
