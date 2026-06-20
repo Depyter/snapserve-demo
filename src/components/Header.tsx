@@ -31,7 +31,7 @@ const sectionOrder: ActiveSection[] = [
 const requestDemoButtonClassNames: Record<ActiveSection, string> = {
 	home: "h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-[#fbf8f2] px-3 !text-[#291F1E] hover:!bg-[#f1e9de] hover:!text-[#291F1E] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
 	features:
-		"h-10 rounded-[1.35rem] border border-transparent !bg-[var(--landing-accent)] px-3 !text-white hover:!bg-[#1739d8] hover:!text-white sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-transparent !bg-[var(--landing-accent)] px-3 !text-white hover:!bg-[var(--landing-accent-deep)] hover:!text-white sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
 	"wait-time":
 		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-white px-3 !text-[#201c1c] hover:!bg-[#f2f2f2] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
 	testimony:

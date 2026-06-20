@@ -37,10 +37,12 @@
   --landing-title-muted: #9d9692;
   --landing-border-soft: rgba(32, 28, 28, 0.12);
   --landing-border: rgba(32, 28, 28, 0.18);
+  --landing-border-strong: rgba(32, 28, 28, 0.34);
   --landing-rule: rgba(32, 28, 28, 0.24);
-  --landing-accent: #1d43da;
-  --landing-accent-soft: rgba(29, 67, 218, 0.12);
-  --landing-accent-ring: rgba(29, 67, 218, 0.2);
+  --landing-accent: #3a5fd1;
+  --landing-accent-deep: #2d50c0;
+  --landing-accent-soft: rgba(58, 95, 209, 0.12);
+  --landing-accent-ring: rgba(58, 95, 209, 0.2);
   --landing-olive: #7e8f4e;
   --landing-ink-strong-border: rgba(41, 31, 30, 0.12);
   --landing-card-shadow: rgba(32, 28, 28, 0.06);
@@ -76,6 +78,8 @@
   --receipt-accent-deep: #7b3330;
   --receipt-ring: #8f7642;
   --receipt-grid: #6b4b2a;
+  --receipt-grid-line-x: rgba(241, 216, 158, 0.1);
+  --receipt-grid-line-y: rgba(241, 216, 158, 0.08);
   --receipt-shadow: rgba(35, 25, 15, 0.22);
   --receipt-option-shadow: rgba(181, 67, 56, 0.12);
 
@@ -344,8 +348,27 @@ pre code {
 }
 
 .receipt-shell {
+  position: relative;
   color: var(--receipt-ink);
-  background: var(--receipt-bg);
+  background-image:
+    linear-gradient(
+      90deg,
+      var(--receipt-grid-line-x) 0,
+      var(--receipt-grid-line-x) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      180deg,
+      var(--receipt-grid-line-y) 0,
+      var(--receipt-grid-line-y) 1px,
+      transparent 1px
+    ),
+    linear-gradient(180deg, #798852 0%, #86975c 100%);
+  background-size:
+    84px 84px,
+    84px 84px,
+    auto;
+  background-position: center center;
 }
 
 .receipt-paper {
@@ -645,6 +668,116 @@ pre code {
   background: #fff;
 }
 
+.testimony-section-shell {
+  background: #fff;
+}
+
+.testimony-marquee-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.testimony-marquee-toggle {
+  border: 1px solid var(--landing-border);
+  border-radius: 9999px;
+  background: color-mix(in oklab, white 94%, var(--landing-bg) 6%);
+  padding: 0.8rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--landing-copy-muted);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.testimony-marquee-toggle:hover,
+.testimony-marquee-toggle[aria-pressed="true"] {
+  border-color: var(--landing-border-strong);
+  color: var(--landing-ink);
+}
+
+.testimony-marquee-toggle[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--landing-accent-soft) 38%, white 62%);
+  box-shadow: inset 0 0 0 1px var(--landing-border-strong);
+}
+
+.testimony-marquee-toggle:focus-visible {
+  outline: none;
+  border-color: var(--landing-border-strong);
+  color: var(--landing-ink);
+  box-shadow:
+    0 0 0 3px var(--landing-accent-ring),
+    inset 0 0 0 1px var(--landing-border-strong);
+}
+
+.testimony-marquee-shell {
+  background: transparent;
+  overflow: hidden;
+  cursor: grab;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 7%,
+    black 93%,
+    transparent
+  );
+}
+
+.testimony-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  animation: testimony-marquee-scroll 34s linear infinite;
+  will-change: transform;
+}
+
+.testimony-marquee-group {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.testimony-card {
+  width: clamp(16.5rem, 21vw, 19rem);
+  flex: 0 0 clamp(16.5rem, 21vw, 19rem);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.testimony-card:hover,
+.testimony-card:focus-within {
+  border-color: var(--landing-border-strong);
+  box-shadow:
+    inset 0 0 0 1px var(--landing-border-strong),
+    0 26px 60px rgba(32, 28, 28, 0.1);
+}
+
+.testimony-marquee-shell:hover .testimony-marquee-track,
+.testimony-marquee-shell:focus-within .testimony-marquee-track,
+.testimony-marquee-shell[data-paused="true"] .testimony-marquee-track {
+  animation-play-state: paused;
+}
+
+.testimony-marquee-shell[data-pointer-paused="true"] {
+  cursor: grabbing;
+}
+
+@keyframes testimony-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.75rem));
+  }
+}
+
 .receipt-option {
   border-color: color-mix(in oklab, var(--receipt-ink) 70%, transparent);
   background: var(--receipt-option);
@@ -752,6 +885,16 @@ a {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimony-marquee-track {
+    animation: none;
+  }
+
+  .rise-in {
+    animation: none;
   }
 }
 

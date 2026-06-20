@@ -20,7 +20,7 @@ const sizeClassNames = {
 
 const toneClassNames = {
 	solid:
-		"border border-transparent bg-[var(--landing-accent)] !text-white hover:bg-[#1739d8] hover:!text-white",
+		"border border-transparent bg-[var(--landing-accent)] !text-white hover:bg-[var(--landing-accent-deep)] hover:!text-white",
 	surface:
 		"border border-[var(--landing-accent)] bg-[var(--landing-bg)]/92 text-[var(--landing-accent)] hover:bg-[var(--landing-accent)] hover:text-white",
 } as const;

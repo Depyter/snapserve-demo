@@ -47,7 +47,7 @@ function WaitTimeMetricCard({
 				{metric.label}
 			</p>
 
-			<p className="display-title mt-8 text-[clamp(3.75rem,11vw,5.75rem)] leading-[0.86] tracking-[-0.07em] text-[var(--landing-ink)] sm:text-[clamp(4.35rem,8vw,7.1rem)]">
+			<p className="display-title mt-8 whitespace-nowrap text-[clamp(3.25rem,9.8vw,5.2rem)] leading-[0.86] tracking-[-0.07em] text-[var(--landing-ink)] sm:text-[clamp(3.95rem,7.2vw,6.35rem)]">
 				{metric.value}
 			</p>
 		</article>
@@ -138,7 +138,7 @@ export default function WaitTimeSection() {
 		<section
 			id="wait-time"
 			ref={sectionRef}
-			className="wait-time-section-shell px-4 py-20 text-[var(--landing-ink)] sm:px-6 sm:py-24 lg:px-8 lg:py-32"
+			className="wait-time-section-shell px-4 pt-20 text-[var(--landing-ink)] sm:px-6 sm:pt-24 lg:px-8 lg:pt-32"
 		>
 			<div className="mx-auto max-w-7xl">
 				<div

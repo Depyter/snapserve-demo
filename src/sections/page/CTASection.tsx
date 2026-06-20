@@ -78,7 +78,7 @@ function MobileSetupStep({ step }: { step: SetupStep }) {
 			<span
 				className={[
 					mobileEyebrowTextClassName,
-					"uppercase tracking-[0.2em] text-[#1D43DA]",
+					"uppercase tracking-[0.2em] text-[var(--landing-accent)]",
 				].join(" ")}
 			>
 				{step.label}
@@ -104,7 +104,7 @@ function DesktopSetupStep({ step }: { step: SetupStep }) {
 				step.hasAction ? "items-start" : "",
 			].join(" ")}
 		>
-			<span className="text-sm font-semibold tracking-[0.25em] uppercase text-[#1D43DA] xl:text-base">
+			<span className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--landing-accent)] xl:text-base">
 				{step.label}
 			</span>
 			<h3 className={desktopStepTitleClassName}>{step.title}</h3>
@@ -260,7 +260,7 @@ export default function CTASection() {
 
 					{/* FAQ Hint */}
 					<div className="w-[550px] xl:w-[650px] flex-shrink-0 flex flex-col justify-center">
-						<span className="text-sm font-semibold tracking-[0.25em] uppercase text-[#1D43DA] xl:text-base">
+						<span className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--landing-accent)] xl:text-base">
 							{faqHint.label}
 						</span>
 						<h3 className={desktopStepTitleClassName}>{faqHint.title}</h3>
