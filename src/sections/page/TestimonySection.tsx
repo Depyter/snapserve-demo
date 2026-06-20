@@ -84,21 +84,31 @@ const marqueePasses = [
 function TestimonialCard({
 	testimonial,
 	className = "",
+	fixedHeight = false,
 }: {
 	testimonial: Testimonial;
 	className?: string;
+	fixedHeight?: boolean;
 }) {
 	return (
 		<article
 			className={[
 				"rounded-[2rem] border border-[var(--landing-border)] bg-white p-6 text-left shadow-[0_20px_50px_rgba(32,28,28,0.08)] sm:p-7 lg:shadow-none",
+				fixedHeight
+					? "flex h-[20rem] flex-col min-[370px]:h-[16rem] sm:h-[20rem]"
+					: "",
 				className,
 			].join(" ")}
 		>
 			<p className="display-title text-[1.35rem] leading-[1.04] tracking-[-0.045em] text-[var(--landing-ink)] sm:text-[1.55rem]">
 				&ldquo;{testimonial.quote}&rdquo;
 			</p>
-			<footer className="mt-7 border-t border-[var(--landing-border-soft)] pt-4">
+			<footer
+				className={[
+					fixedHeight ? "mt-auto" : "mt-7",
+					"border-t border-[var(--landing-border-soft)] pt-4",
+				].join(" ")}
+			>
 				<p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--landing-copy-muted)]">
 					{testimonial.name}
 				</p>
@@ -165,7 +175,7 @@ export default function TestimonySection() {
 	return (
 		<section
 			id="testimony"
-			className="testimony-section-shell px-4 py-40 text-[var(--landing-ink)] sm:px-6 sm:py-48 lg:px-8 lg:py-72"
+			className="testimony-section-shell px-4 pt-32 pb-20 text-[var(--landing-ink)] sm:px-6 sm:pt-40 sm:pb-28 lg:px-8 lg:pt-72 lg:pb-72"
 		>
 			<div className="mx-auto max-w-7xl">
 				<div className="mx-auto max-w-4xl text-center">
@@ -183,6 +193,7 @@ export default function TestimonySection() {
 					<TestimonialCard
 						key={testimonials[activeIndex].name}
 						testimonial={testimonials[activeIndex]}
+						fixedHeight
 						className={prefersReducedMotion ? "" : "rise-in"}
 					/>
 

@@ -383,6 +383,7 @@ export default function PricingSection() {
 	const initializedStackRef = useRef(false);
 	const latestIssuedReceiptIdRef = useRef<string | null>(null);
 	const stageRef = useRef<HTMLDivElement | null>(null);
+	const mobileReceiptRef = useRef<HTMLDivElement | null>(null);
 	const receiptRefs = useRef<Array<HTMLDivElement | null>>([]);
 
 	const sectionRef = useRef<HTMLElement | null>(null);
@@ -402,63 +403,100 @@ export default function PricingSection() {
 	useGSAP(
 		() => {
 			const mm = gsap.matchMedia();
+			const initialized = initializedStackRef.current;
+			const mobileReceipt = mobileReceiptRef.current;
 			const targetReceipts = receiptStack.map((receipt, index) => ({
 				receipt,
 				element: receiptRefs.current[index],
 				depth: receiptStack.length - 1 - index,
 			}));
 
-			mm.add("(prefers-reduced-motion: no-preference)", () => {
-				targetReceipts.forEach(({ receipt, element, depth }) => {
-					if (!element) {
+			mm.add(
+				"(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
+				() => {
+					if (!mobileReceipt) {
 						return;
 					}
 
-					const x = depth * -16;
-					const y = depth * 20;
-					const scale = 1 - depth * 0.018;
-					const autoAlpha = 1 - depth * 0.04;
+					if (!initialized) {
+						gsap.set(mobileReceipt, { autoAlpha: 1, y: 0 });
+						return;
+					}
 
-					if (
-						initializedStackRef.current &&
-						latestIssuedReceiptIdRef.current === receipt.receiptId
-					) {
-						gsap.fromTo(
-							element,
-							{
-								x: 220,
-								y: y - 18,
-								rotation: receipt.rotation + 5.5,
-								scale: scale + 0.03,
-								autoAlpha: 0,
-							},
-							{
+					gsap.fromTo(
+						mobileReceipt,
+						{ autoAlpha: 0, y: 16 },
+						{
+							autoAlpha: 1,
+							y: 0,
+							duration: 0.42,
+							ease: "power2.out",
+							overwrite: true,
+						},
+					);
+				},
+			);
+
+			mm.add("(max-width: 1023px) and (prefers-reduced-motion: reduce)", () => {
+				if (mobileReceipt) {
+					gsap.set(mobileReceipt, { autoAlpha: 1, y: 0 });
+				}
+			});
+
+			mm.add(
+				"(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+				() => {
+					targetReceipts.forEach(({ receipt, element, depth }) => {
+						if (!element) {
+							return;
+						}
+
+						const x = depth * -16;
+						const y = depth * 20;
+						const scale = 1 - depth * 0.018;
+						const autoAlpha = 1 - depth * 0.04;
+
+						if (
+							initialized &&
+							latestIssuedReceiptIdRef.current === receipt.receiptId
+						) {
+							gsap.fromTo(
+								element,
+								{
+									x: 220,
+									y: y - 18,
+									rotation: receipt.rotation + 5.5,
+									scale: scale + 0.03,
+									autoAlpha: 0,
+								},
+								{
+									x,
+									y,
+									rotation: receipt.rotation,
+									scale,
+									autoAlpha,
+									duration: 0.82,
+									ease: "power3.out",
+									overwrite: true,
+								},
+							);
+						} else {
+							gsap.to(element, {
 								x,
 								y,
 								rotation: receipt.rotation,
 								scale,
 								autoAlpha,
-								duration: 0.82,
-								ease: "power3.out",
+								duration: initialized ? 0.58 : 0,
+								ease: "power2.out",
 								overwrite: true,
-							},
-						);
-					} else {
-						gsap.to(element, {
-							x,
-							y,
-							rotation: receipt.rotation,
-							scale,
-							autoAlpha,
-							duration: initializedStackRef.current ? 0.58 : 0,
-							ease: "power2.out",
-							overwrite: true,
-						});
-					}
-				});
-			});
+							});
+						}
+					});
+				},
+			);
 
-			mm.add("(prefers-reduced-motion: reduce)", () => {
+			mm.add("(min-width: 1024px) and (prefers-reduced-motion: reduce)", () => {
 				targetReceipts.forEach(({ receipt, element, depth }) => {
 					if (!element) {
 						return;
@@ -479,7 +517,11 @@ export default function PricingSection() {
 
 			return () => mm.revert();
 		},
-		{ scope: stageRef, dependencies: [stackKey] },
+		{
+			scope: stageRef,
+			dependencies: [stackKey],
+			revertOnUpdate: true,
+		},
 	);
 
 	const handleSelectTier = (tierId: Tier["id"]) => {
@@ -572,7 +614,15 @@ export default function PricingSection() {
 						</aside>
 
 						<div ref={stageRef} className="relative min-w-0 lg:pt-2">
-							<div className="relative pb-[clamp(8rem,22vw,12rem)] md:pb-14">
+							<div className="lg:hidden">
+								{activeReceipt ? (
+									<div ref={mobileReceiptRef} className="will-change-transform">
+										<ReceiptPaper entry={activeReceipt} />
+									</div>
+								) : null}
+							</div>
+
+							<div className="relative hidden pb-14 lg:block">
 								{receiptStack.map((entry, index) => {
 									const isTop = index === receiptStack.length - 1;
 

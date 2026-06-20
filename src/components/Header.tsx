@@ -1,6 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ensureScrollTriggerRegistered } from "#/lib/gsap.ts";
 import LandingButton from "./LandingButton";
@@ -194,11 +195,7 @@ export default function Header() {
 						className={`${buttonBaseClass} ${headerActionClassNames[activeSection]}`}
 					>
 						<span className="hidden lg:inline">Main Menu</span>
-						<span className="relative inline-flex h-3.5 w-[18px] flex-col items-center justify-center gap-[5px] lg:hidden">
-							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
-							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
-							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
-						</span>
+						<Menu aria-hidden="true" className="size-[18px] lg:hidden" />
 					</button>
 
 					<LandingButton
