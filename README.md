@@ -137,7 +137,6 @@ Important page sections live in:
 - `src/sections/page/FAQSection.tsx`
 - `src/sections/page/CTASection.tsx`
 - `src/sections/page/FooterSection.tsx`
-- `src/sections/page/Section.tsx`
 
 The route shell and page route are:
 

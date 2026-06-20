@@ -4,7 +4,19 @@ import { useMemo, useRef, useState } from "react";
 
 gsap.registerPlugin(useGSAP);
 
-const tiers = [
+type TierId = "basic" | "premium" | "pro";
+
+type Tier = {
+	id: TierId;
+	name: string;
+	label: string;
+	price: number;
+	popular?: boolean;
+	description: string;
+	features: readonly string[];
+};
+
+const tiers: readonly Tier[] = [
 	{
 		id: "basic",
 		name: "Basic",
@@ -55,9 +67,7 @@ const tiers = [
 			"24/7 Tech Support",
 		],
 	},
-] as const;
-
-type Tier = (typeof tiers)[number];
+];
 
 type ReceiptEntry = {
 	receiptId: string;
