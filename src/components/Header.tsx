@@ -28,21 +28,21 @@ const sectionOrder: ActiveSection[] = [
 	"footer",
 ];
 
-const requestDemoButtonClassNames: Record<ActiveSection, string> = {
-	home: "h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-[#fbf8f2] px-3 !text-[#291F1E] hover:!bg-[#f1e9de] hover:!text-[#291F1E] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+const headerActionClassNames: Record<ActiveSection, string> = {
+	home: "h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-[#fbf8f2] px-3 !text-[#291F1E] hover:!bg-[#f1e9de] hover:!text-[#291F1E] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	features:
-		"h-10 rounded-[1.35rem] border border-transparent !bg-[var(--landing-accent)] px-3 !text-white hover:!bg-[var(--landing-accent-deep)] hover:!text-white sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-transparent !bg-[var(--landing-accent)] px-3 !text-white hover:!bg-[var(--landing-accent-deep)] hover:!text-white sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	"wait-time":
-		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-white px-3 !text-[#201c1c] hover:!bg-[#f2f2f2] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-white px-3 !text-[#201c1c] hover:!bg-[#f2f2f2] hover:!text-[#201c1c] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	testimony:
-		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[var(--landing-card)] px-3 !text-[#201c1c] hover:!bg-[#efe8dd] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[var(--landing-card)] px-3 !text-[#201c1c] hover:!bg-[#efe8dd] hover:!text-[#201c1c] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	setup:
-		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[#f5f2ed] px-3 !text-[#201c1c] hover:!bg-[#eee6da] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-[rgba(32,28,28,0.12)] !bg-[#f5f2ed] px-3 !text-[#201c1c] hover:!bg-[#eee6da] hover:!text-[#201c1c] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	pricing:
-		"h-10 rounded-[1.35rem] border border-[rgba(37,57,71,0.22)] !bg-[var(--receipt-bg)] px-3 !text-[#201c1c] hover:!bg-[#738446] hover:!text-[#201c1c] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
-	faq: "h-10 rounded-[1.35rem] border border-[rgba(248,239,216,0.24)] !bg-[#735544] px-3 !text-[#f8efd8] hover:!bg-[#654739] hover:!text-[#f8efd8] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-[rgba(37,57,71,0.22)] !bg-[var(--receipt-bg)] px-3 !text-[#201c1c] hover:!bg-[#738446] hover:!text-[#201c1c] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
+	faq: "h-10 rounded-[1.35rem] border border-[rgba(248,239,216,0.24)] !bg-[#735544] px-3 !text-[#f8efd8] hover:!bg-[#654739] hover:!text-[#f8efd8] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 	footer:
-		"h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-white px-3 !text-[#291F1E] hover:!bg-[#f5f2ed] hover:!text-[#291F1E] sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]",
+		"h-10 rounded-[1.35rem] border border-[rgba(41,31,30,0.12)] !bg-white px-3 !text-[#291F1E] hover:!bg-[#f5f2ed] hover:!text-[#291F1E] sm:h-11 sm:px-4 lg:h-12 lg:px-5",
 };
 
 export default function Header() {
@@ -99,33 +99,30 @@ export default function Header() {
 	}, []);
 
 	useGSAP(
-		() => {
+		(_context, contextSafe) => {
 			const chrome = chromeRefs.current.filter(Boolean) as HTMLElement[];
+			const faqSection = document.getElementById("faq");
 
-			if (chrome.length === 0) {
+			if (chrome.length === 0 || !contextSafe) {
 				return;
 			}
 
-			const showChrome = () => {
+			const showChrome = contextSafe(() => {
 				gsap.to(chrome, {
 					autoAlpha: 1,
 					duration: 0.38,
 					ease: "power2.out",
 					overwrite: true,
 				});
-			};
+			});
 
-			const hideChrome = () => {
+			const hideChrome = contextSafe(() => {
 				gsap.to(chrome, {
 					autoAlpha: 0,
 					duration: 0.28,
 					ease: "power2.out",
 					overwrite: true,
 				});
-			};
-
-			gsap.set(chrome, {
-				autoAlpha: window.scrollY > 24 ? 0 : 1,
 			});
 
 			const trigger = ScrollTrigger.create({
@@ -135,12 +132,33 @@ export default function Header() {
 				onLeaveBack: showChrome,
 			});
 
+			const faqTrigger = faqSection
+				? ScrollTrigger.create({
+						trigger: faqSection,
+						start: "top 28%",
+						onEnter: showChrome,
+						onEnterBack: showChrome,
+						onLeaveBack: hideChrome,
+					})
+				: null;
+
+			const hasReachedFaq =
+				faqSection !== null &&
+				faqSection.getBoundingClientRect().top <= window.innerHeight * 0.28;
+			gsap.set(chrome, {
+				autoAlpha: window.scrollY > 24 && !hasReachedFaq ? 0 : 1,
+				overwrite: true,
+			});
+
 			return () => {
 				trigger.kill();
+				faqTrigger?.kill();
 			};
 		},
 		{ scope: headerRef },
 	);
+	const buttonBaseClass =
+		"inline-flex h-10 items-center justify-center rounded-[1.35rem] bg-[var(--landing-bg)]/92 px-3 text-[0.68rem] font-semibold tracking-[0.08em] text-[#291F1E] transition hover:bg-[var(--landing-bg)] hover:text-[var(--landing-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#291F1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-11 sm:px-4 lg:h-12 lg:px-5";
 
 	return (
 		<header
@@ -172,9 +190,14 @@ export default function Header() {
 						aria-controls="main-menu"
 						aria-expanded={menuOpen}
 						onClick={() => setMenuOpen((value) => !value)}
-						className="inline-flex h-10 items-center justify-center rounded-[1.35rem] bg-[var(--landing-bg)]/92 px-3 text-[0.68rem] font-semibold tracking-[0.08em] text-[#291F1E] transition hover:bg-[var(--landing-bg)] hover:text-[var(--landing-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#291F1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-11 sm:px-4 sm:text-[0.72rem] lg:h-12 lg:px-5 lg:text-[0.78rem]"
+						className={`${buttonBaseClass} ${headerActionClassNames[activeSection]}`}
 					>
-						Main Menu
+						<span className="hidden lg:inline">Main Menu</span>
+						<span className="relative inline-flex h-3.5 w-[18px] flex-col items-center justify-center gap-[5px] lg:hidden">
+							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
+							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
+							<span className="block h-[2px] w-full rounded-full bg-current origin-center" />
+						</span>
 					</button>
 
 					<LandingButton
@@ -182,7 +205,7 @@ export default function Header() {
 						tone="surface"
 						size="sm"
 						showIcon={false}
-						className={requestDemoButtonClassNames[activeSection]}
+						className={headerActionClassNames[activeSection]}
 					>
 						Request a Demo
 					</LandingButton>

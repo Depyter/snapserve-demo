@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
 	return (
-		<main className="bg-white">
+		<main className="bg-[#f5f2ed]">
 			<HeroSection />
 			<FeaturesSection />
 			<WaitTimeSection />

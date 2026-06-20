@@ -2,7 +2,10 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
-import { mobileEyebrowTextClassName } from "./mobileTypeScale";
+import {
+	faqSectionTitleClassName,
+	mobileEyebrowTextClassName,
+} from "./mobileTypeScale";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -141,6 +144,17 @@ export default function WaitTimeSection() {
 			className="wait-time-section-shell px-4 pt-20 text-[var(--landing-ink)] sm:px-6 sm:pt-24 lg:px-8 lg:pt-32"
 		>
 			<div className="mx-auto max-w-7xl">
+				<header ref={headerRef} className="mb-12 text-center sm:mb-16 lg:mb-20">
+					<h2
+						className={[
+							faqSectionTitleClassName,
+							"text-[var(--landing-ink)] lg:text-[clamp(3.05rem,4vw,4.2rem)]",
+						].join(" ")}
+					>
+						The Result
+					</h2>
+				</header>
+
 				<div
 					ref={bandRef}
 					className="overflow-hidden border-l border-b border-[var(--landing-border)]"

@@ -1,6 +1,3 @@
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 import {
 	faqQuestionTitleClassName,
@@ -8,8 +5,7 @@ import {
 	mobileBodyCopyClassName,
 	mobileFeatureTitleClassName,
 } from "./mobileTypeScale";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import { useShellReveal } from "./sectionShellMotion";
 
 type FeatureItem = {
 	title: string;
@@ -50,11 +46,6 @@ const featureItems: FeatureItem[] = [
 	},
 ];
 
-const edgeReveal = {
-	inset: "clamp(0.85rem, 2vw, 2rem)",
-	radius: "clamp(2rem, 3vw, 2.75rem)",
-} as const;
-
 const featureTitleClassName = [faqQuestionTitleClassName, "text-white"].join(
 	" ",
 );
@@ -69,17 +60,8 @@ function SectionHeader() {
 					"text-white",
 				].join(" ")}
 			>
-				Increase Customer Loyalty and Reduce Wait Times
+				Increase Customer Loyalty
 			</h2>
-			<p
-				className={[
-					mobileBodyCopyClassName,
-					"mx-auto max-w-2xl text-white/76 lg:text-[1rem] lg:leading-[1.58]",
-				].join(" ")}
-			>
-				Move guests from scan to service with a menu, order flow, and operations
-				view that stay in sync.
-			</p>
 		</header>
 	);
 }
@@ -173,75 +155,8 @@ function MobileFeatureRow({ item }: { item: FeatureItem }) {
 
 export default function FeaturesSection() {
 	const sectionRef = useRef<HTMLElement | null>(null);
-	const stageRef = useRef<HTMLDivElement | null>(null);
-	const frameRef = useRef<HTMLDivElement | null>(null);
 
-	useGSAP(
-		() => {
-			const mm = gsap.matchMedia();
-
-			mm.add(
-				"(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-				() => {
-					const section = sectionRef.current;
-					const stage = stageRef.current;
-					const frame = frameRef.current;
-
-					if (!section || !stage || !frame) {
-						return;
-					}
-
-					gsap.set(stage, {
-						paddingLeft: 0,
-						paddingRight: 0,
-						willChange: "padding",
-					});
-					gsap.set(frame, {
-						borderBottomLeftRadius: 0,
-						borderBottomRightRadius: 0,
-					});
-
-					const timeline = gsap.timeline({
-						scrollTrigger: {
-							trigger: section,
-							start: "bottom bottom",
-							end: "bottom 52%",
-							scrub: 0.95,
-							invalidateOnRefresh: true,
-						},
-					});
-
-					timeline.to(
-						stage,
-						{
-							paddingLeft: edgeReveal.inset,
-							paddingRight: edgeReveal.inset,
-							ease: "none",
-						},
-						0,
-					);
-
-					timeline.to(
-						frame,
-						{
-							borderBottomLeftRadius: edgeReveal.radius,
-							borderBottomRightRadius: edgeReveal.radius,
-							ease: "none",
-						},
-						0,
-					);
-
-					return () => {
-						timeline.scrollTrigger?.kill();
-						timeline.kill();
-					};
-				},
-			);
-
-			return () => mm.revert();
-		},
-		{ scope: sectionRef },
-	);
+	useShellReveal(sectionRef);
 
 	return (
 		<section
@@ -249,23 +164,23 @@ export default function FeaturesSection() {
 			ref={sectionRef}
 			className="features-section-shell relative text-[var(--landing-ink)]"
 		>
-			<div ref={stageRef} className="mx-auto w-full">
+			<div data-shell-stage className="mx-auto w-full">
 				<div
-					ref={frameRef}
-					className="relative overflow-hidden bg-[var(--landing-accent)] pb-6 pt-10 sm:pb-8 sm:pt-12 lg:pb-10 lg:pt-16"
+					data-shell-frame
+					className="relative overflow-hidden bg-[var(--landing-accent)] py-16 sm:py-20 lg:py-28"
 				>
 					<div className="features-grid-overlay pointer-events-none absolute inset-0" />
 
 					<div className="relative z-10 mx-auto max-w-[108rem] px-4 sm:px-6 lg:px-6 xl:px-8">
 						<SectionHeader />
 
-						<div className="mt-8 space-y-9 sm:mt-10 sm:space-y-11 lg:mt-16 lg:hidden">
+						<div className="mt-16 space-y-9 sm:mt-20 sm:space-y-11 lg:hidden">
 							{featureItems.map((item) => (
 								<MobileFeatureRow key={item.title} item={item} />
 							))}
 						</div>
 
-						<div className="mt-12 hidden space-y-12 lg:block xl:space-y-16">
+						<div className="mt-28 hidden space-y-12 lg:block xl:space-y-16">
 							{featureItems.map((item, index) => (
 								<FeatureRow
 									key={item.title}

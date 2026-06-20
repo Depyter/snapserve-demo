@@ -112,7 +112,7 @@ export default function FAQSection() {
 		<section
 			id="faq"
 			ref={sectionRef}
-			className="faq-section-shell px-4 py-20 sm:px-6 lg:px-8"
+			className="faq-section-shell overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:rounded-t-[2.5rem]"
 		>
 			<div className="mx-auto max-w-7xl">
 				<header className="max-w-4xl">

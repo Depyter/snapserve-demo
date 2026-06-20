@@ -165,7 +165,7 @@ export default function TestimonySection() {
 	return (
 		<section
 			id="testimony"
-			className="testimony-section-shell px-4 py-24 text-[var(--landing-ink)] sm:px-6 sm:py-28 lg:px-8 lg:py-48"
+			className="testimony-section-shell px-4 py-40 text-[var(--landing-ink)] sm:px-6 sm:py-48 lg:px-8 lg:py-72"
 		>
 			<div className="mx-auto max-w-7xl">
 				<div className="mx-auto max-w-4xl text-center">

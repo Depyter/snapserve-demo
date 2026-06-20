@@ -10,11 +10,10 @@ type FooterIconLinkData = FooterLink & {
 	icon: LucideIcon;
 };
 
-const pageLinks: FooterLink[] = [
-	{
-		label: "Home",
-		href: "#home",
-	},
+const legalLinks: FooterLink[] = [
+	{ label: "Privacy Policy", href: "#privacy" },
+	{ label: "Terms of Service", href: "#terms" },
+	{ label: "Cookie Policy", href: "#cookies" },
 ];
 
 const socialLinks: FooterIconLinkData[] = [
@@ -120,14 +119,14 @@ export default function FooterSection() {
 	return (
 		<footer
 			id="footer"
-			className="bg-white px-4 py-8 text-[var(--landing-ink-strong)] sm:px-6 lg:px-8"
+			className="bg-white overflow-hidden px-4 py-8 lg:rounded-t-[2.5rem] text-[var(--landing-ink-strong)] sm:px-6 lg:px-8"
 		>
 			<div className="mx-auto max-w-[110rem]">
 				<div className="grid gap-8 [grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))] lg:gap-10">
 					<FooterLinkGroup
-						title="Pages"
-						ariaLabel="Footer pages"
-						links={pageLinks}
+						title="Legal"
+						ariaLabel="Footer legal"
+						links={legalLinks}
 					/>
 					<FooterLinkGroup
 						title="Sections"

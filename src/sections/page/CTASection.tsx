@@ -110,7 +110,9 @@ function DesktopSetupStep({ step }: { step: SetupStep }) {
 			<h3 className={desktopStepTitleClassName}>{step.title}</h3>
 			<p className={desktopStepDescriptionClassName}>{step.description}</p>
 			{step.hasAction ? (
-				<LandingButton className="mt-8">Schedule a Call</LandingButton>
+				<LandingButton className="mt-8 h-14 py-1.5 pl-1.5 pr-6">
+					Schedule a Call
+				</LandingButton>
 			) : null}
 		</div>
 	);

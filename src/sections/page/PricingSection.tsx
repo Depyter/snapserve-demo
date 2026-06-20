@@ -1,6 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useMemo, useRef, useState } from "react";
+import { useShellReveal } from "./sectionShellMotion";
 
 gsap.registerPlugin(useGSAP);
 
@@ -385,6 +386,10 @@ export default function PricingSection() {
 	const latestIssuedReceiptIdRef = useRef<string | null>(null);
 	const stageRef = useRef<HTMLDivElement | null>(null);
 	const receiptRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+	const sectionRef = useRef<HTMLElement | null>(null);
+
+	useShellReveal(sectionRef);
 	const [receiptStack, setReceiptStack] = useState<ReceiptEntry[]>(() => [
 		createReceiptEntry(tiers[0], 7399),
 	]);
@@ -498,97 +503,101 @@ export default function PricingSection() {
 	};
 
 	return (
-		<section
-			id="pricing"
-			className="receipt-sans receipt-shell px-4 py-8 sm:px-6 sm:py-16"
-		>
-			<div className="mx-auto grid max-w-[1120px] gap-4 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
-				<aside className="receipt-paper receipt-shadow receipt-ring relative p-3 ring-1 sm:p-4 lg:sticky lg:top-24">
-					<div className="receipt-glow-overlay-tight pointer-events-none absolute inset-0" />
-					<div className="receipt-grid-overlay pointer-events-none absolute inset-0 opacity-[0.14]" />
+		<section id="pricing" ref={sectionRef} className="relative">
+			<div data-shell-stage className="mx-auto w-full">
+				<div
+					data-shell-frame
+					className="receipt-sans receipt-shell relative lg:rounded-t-[2.5rem]"
+				>
+					<div className="mx-auto grid max-w-[1120px] gap-4 px-4 py-8 sm:px-6 sm:py-16 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
+						<aside className="receipt-paper receipt-shadow receipt-ring relative p-3 ring-1 sm:p-4 lg:sticky lg:top-24">
+							<div className="receipt-glow-overlay-tight pointer-events-none absolute inset-0" />
+							<div className="receipt-grid-overlay pointer-events-none absolute inset-0 opacity-[0.14]" />
 
-					<div className="receipt-sheet receipt-border-ink relative border-2 p-3 sm:p-4">
-						<header className="receipt-border-ink border-b-2 pb-3 sm:pb-4">
-							<p className="receipt-accent-deep text-[10px] font-bold uppercase tracking-[0.34em]">
-								Plan Selection
-							</p>
-							<h2 className="receipt-serif receipt-heading mt-2 text-3xl font-black leading-none sm:text-4xl">
-								Pricing
-							</h2>
-						</header>
+							<div className="receipt-sheet receipt-border-ink relative border-2 p-3 sm:p-4">
+								<header className="receipt-border-ink border-b-2 pb-3 sm:pb-4">
+									<p className="receipt-accent-deep text-[10px] font-bold uppercase tracking-[0.34em]">
+										Plan Selection
+									</p>
+									<h2 className="receipt-serif receipt-heading mt-2 text-3xl font-black leading-none sm:text-4xl">
+										Pricing
+									</h2>
+								</header>
 
-						<div className="mt-3 grid gap-1.5 md:grid-cols-3 lg:grid-cols-1 sm:gap-2">
-							{tiers.map((tier) => {
-								const selected = tier.id === selectedTierId;
+								<div className="mt-3 grid gap-1.5 md:grid-cols-3 lg:grid-cols-1 sm:gap-2">
+									{tiers.map((tier) => {
+										const selected = tier.id === selectedTierId;
 
-								return (
-									<button
-										key={tier.id}
-										type="button"
-										onClick={() => handleSelectTier(tier.id)}
-										className={[
-											"receipt-option relative w-full overflow-hidden border px-2.5 py-2.5 text-left transition sm:px-3 sm:py-3 md:min-h-[128px] lg:min-h-0",
-											selected ? "is-selected" : "",
-										].join(" ")}
-									>
-										{selected ? (
-											<div className="absolute inset-y-0 left-0 w-1 bg-[var(--receipt-accent)]" />
-										) : null}
-
-										<div className="min-w-0">
-											<div className="flex flex-wrap items-center gap-2">
-												<p
-													className={[
-														"receipt-mono text-[10px] font-bold uppercase tracking-[0.16em] sm:text-[11px]",
-														selected ? "receipt-accent" : "receipt-ink",
-													].join(" ")}
-												>
-													{selected ? "[x]" : "[ ]"}
-												</p>
-												<p className="receipt-serif receipt-ink text-xl font-black leading-none sm:text-2xl">
-													{tier.name}
-												</p>
-												{tier.popular ? (
-													<span className="receipt-border-accent receipt-accent border px-2 py-1 text-[8px] font-bold uppercase tracking-[0.22em]">
-														Most Popular
-													</span>
+										return (
+											<button
+												key={tier.id}
+												type="button"
+												onClick={() => handleSelectTier(tier.id)}
+												className={[
+													"receipt-option relative w-full overflow-hidden border px-2.5 py-2.5 text-left transition sm:px-3 sm:py-3 md:min-h-[128px] lg:min-h-0",
+													selected ? "is-selected" : "",
+												].join(" ")}
+											>
+												{selected ? (
+													<div className="absolute inset-y-0 left-0 w-1 bg-[var(--receipt-accent)]" />
 												) : null}
-											</div>
 
-											<p className="receipt-ink-muted mt-2 text-[9px] leading-none font-bold uppercase tracking-[0.12em] sm:mt-3 sm:text-[10px]">
-												{tier.label}
-											</p>
-										</div>
-									</button>
-								);
-							})}
-						</div>
-					</div>
-				</aside>
+												<div className="min-w-0">
+													<div className="flex flex-wrap items-center gap-2">
+														<p
+															className={[
+																"receipt-mono text-[10px] font-bold uppercase tracking-[0.16em] sm:text-[11px]",
+																selected ? "receipt-accent" : "receipt-ink",
+															].join(" ")}
+														>
+															{selected ? "[x]" : "[ ]"}
+														</p>
+														<p className="receipt-serif receipt-ink text-xl font-black leading-none sm:text-2xl">
+															{tier.name}
+														</p>
+														{tier.popular ? (
+															<span className="receipt-border-accent receipt-accent border px-2 py-1 text-[8px] font-bold uppercase tracking-[0.22em]">
+																Most Popular
+															</span>
+														) : null}
+													</div>
 
-				<div ref={stageRef} className="relative min-w-0 lg:pt-2">
-					<div className="relative pb-[clamp(8rem,22vw,12rem)] md:pb-14">
-						{receiptStack.map((entry, index) => {
-							const isTop = index === receiptStack.length - 1;
-
-							return (
-								<div
-									key={entry.receiptId}
-									ref={(element) => {
-										receiptRefs.current[index] = element;
-									}}
-									className={[
-										"will-change-transform",
-										isTop
-											? "relative z-30"
-											: "pointer-events-none absolute inset-0",
-									].join(" ")}
-									style={{ zIndex: index + 10 }}
-								>
-									<ReceiptPaper entry={entry} />
+													<p className="receipt-ink-muted mt-2 text-[9px] leading-none font-bold uppercase tracking-[0.12em] sm:mt-3 sm:text-[10px]">
+														{tier.label}
+													</p>
+												</div>
+											</button>
+										);
+									})}
 								</div>
-							);
-						})}
+							</div>
+						</aside>
+
+						<div ref={stageRef} className="relative min-w-0 lg:pt-2">
+							<div className="relative pb-[clamp(8rem,22vw,12rem)] md:pb-14">
+								{receiptStack.map((entry, index) => {
+									const isTop = index === receiptStack.length - 1;
+
+									return (
+										<div
+											key={entry.receiptId}
+											ref={(element) => {
+												receiptRefs.current[index] = element;
+											}}
+											className={[
+												"will-change-transform",
+												isTop
+													? "relative z-30"
+													: "pointer-events-none absolute inset-0",
+											].join(" ")}
+											style={{ zIndex: index + 10 }}
+										>
+											<ReceiptPaper entry={entry} />
+										</div>
+									);
+								})}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
