@@ -27,11 +27,11 @@ export default function HeroSection() {
 			/>
 			<div className="relative mx-auto flex min-h-[100svh] max-w-6xl items-center justify-center px-4 py-16 sm:px-6">
 				<div className="flex w-full max-w-4xl flex-col items-center justify-center text-center">
-					<h1 className="display-title max-w-[10ch] text-balance text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
+					<h1 className="display-title max-w-[10ch] text-balance text-5xl sm:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
 						Scan to order.
 					</h1>
 
-					<p className="display-title mt-3 max-w-[14ch] text-balance text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
+					<p className="display-title mt-3 max-w-[14ch] text-balance text-5xl sm:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-[-0.06em] text-[#291F1E]">
 						Run better restaurants.
 					</p>
 				</div>
