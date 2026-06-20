@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { type MouseEvent, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "#/lib/utils.ts";
 import { mainMenuItems } from "#/sections/page/siteNavigation";
 
@@ -11,7 +12,11 @@ export default function SiteMenuOverlay({
 	open,
 	onClose,
 }: SiteMenuOverlayProps) {
-	const backButtonRef = useRef<HTMLButtonElement | null>(null);
+	const dialogRef = useRef<HTMLDivElement | null>(null);
+	const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+	const onCloseRef = useRef(onClose);
+	const previousFocusRef = useRef<HTMLElement | null>(null);
+	const shouldRestoreFocusRef = useRef(true);
 	const menuRowClassName =
 		"grid grid-cols-[auto_1fr_auto] items-end gap-3 border-b border-[#291F1E] py-5 no-underline transition last:border-b-0";
 	const interactiveRowClassName = cn(
@@ -19,46 +24,197 @@ export default function SiteMenuOverlay({
 		"w-full cursor-pointer text-left hover:opacity-90",
 	);
 
+	onCloseRef.current = onClose;
+
+	const closeOverlay = (restoreFocus = true) => {
+		shouldRestoreFocusRef.current = restoreFocus;
+		onCloseRef.current();
+	};
+
+	const focusSectionTarget = (href: string) => {
+		const targetId = href.replace(/^#/, "");
+		if (!targetId) {
+			return;
+		}
+
+		requestAnimationFrame(() => {
+			const targetElement = document.getElementById(targetId);
+			if (!targetElement) {
+				return;
+			}
+
+			const previousTabIndex = targetElement.getAttribute("tabindex");
+			const cleanupFocusability = () => {
+				if (previousTabIndex === null) {
+					targetElement.removeAttribute("tabindex");
+					return;
+				}
+
+				targetElement.setAttribute("tabindex", previousTabIndex);
+			};
+			const prefersReducedMotion = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			).matches;
+
+			window.history.replaceState(null, "", href);
+			if (previousTabIndex === null) {
+				targetElement.setAttribute("tabindex", "-1");
+			}
+
+			targetElement.focus({ preventScroll: true });
+			targetElement.scrollIntoView({
+				behavior: prefersReducedMotion ? "auto" : "smooth",
+				block: "start",
+			});
+			targetElement.addEventListener("blur", cleanupFocusability, {
+				once: true,
+			});
+		});
+	};
+
+	const handleMenuItemClick = (
+		event: MouseEvent<HTMLAnchorElement>,
+		href: string,
+	) => {
+		if (!href.startsWith("#")) {
+			closeOverlay(false);
+			return;
+		}
+
+		event.preventDefault();
+		closeOverlay(false);
+		focusSectionTarget(href);
+	};
+
 	useEffect(() => {
 		if (!open) {
 			return;
 		}
 
+		const dialogElement = dialogRef.current;
+		if (!dialogElement) {
+			return;
+		}
+
+		previousFocusRef.current =
+			document.activeElement instanceof HTMLElement
+				? document.activeElement
+				: null;
+		shouldRestoreFocusRef.current = true;
 		const bodyStyle = document.body.style;
 		const previousOverflow = bodyStyle.overflow;
 
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Escape") {
-				onClose();
+				event.preventDefault();
+				shouldRestoreFocusRef.current = true;
+				onCloseRef.current();
+				return;
+			}
+
+			if (event.key !== "Tab") {
+				return;
+			}
+
+			const focusableElements = Array.from(
+				dialogElement.querySelectorAll<HTMLElement>(
+					'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+				),
+			).filter((element) => !element.hasAttribute("disabled"));
+
+			if (focusableElements.length === 0) {
+				event.preventDefault();
+				dialogElement.focus();
+				return;
+			}
+
+			const firstFocusableElement = focusableElements[0];
+			const lastFocusableElement =
+				focusableElements[focusableElements.length - 1];
+
+			if (event.shiftKey && document.activeElement === firstFocusableElement) {
+				event.preventDefault();
+				lastFocusableElement.focus();
+			} else if (
+				!event.shiftKey &&
+				document.activeElement === lastFocusableElement
+			) {
+				event.preventDefault();
+				firstFocusableElement.focus();
 			}
 		};
+
+		const bodyChildren = Array.from(document.body.children);
+		const siblingState = bodyChildren
+			.filter((child) => child !== dialogElement)
+			.map((child) => ({
+				child,
+				ariaHidden: child.getAttribute("aria-hidden"),
+				inert: child.hasAttribute("inert"),
+			}));
+
+		for (const { child } of siblingState) {
+			child.setAttribute("aria-hidden", "true");
+			child.setAttribute("inert", "");
+		}
 
 		bodyStyle.overflow = "hidden";
 		window.addEventListener("keydown", handleKeyDown);
 		requestAnimationFrame(() => {
-			backButtonRef.current?.focus();
+			closeButtonRef.current?.focus();
 		});
 
 		return () => {
 			bodyStyle.overflow = previousOverflow;
 			window.removeEventListener("keydown", handleKeyDown);
-		};
-	}, [onClose, open]);
+			for (const { child, ariaHidden, inert } of siblingState) {
+				if (ariaHidden === null) {
+					child.removeAttribute("aria-hidden");
+				} else {
+					child.setAttribute("aria-hidden", ariaHidden);
+				}
 
-	return (
+				if (inert) {
+					child.setAttribute("inert", "");
+				} else {
+					child.removeAttribute("inert");
+				}
+			}
+
+			if (shouldRestoreFocusRef.current) {
+				previousFocusRef.current?.focus();
+			}
+			previousFocusRef.current = null;
+		};
+	}, [open]);
+
+	if (!open || typeof document === "undefined") {
+		return null;
+	}
+
+	return createPortal(
 		<div
-			aria-hidden={!open}
 			id="main-menu"
+			ref={dialogRef}
 			role="dialog"
 			aria-modal="true"
 			aria-label="Main menu"
+			tabIndex={-1}
 			className={cn(
 				"fixed inset-0 z-[60] overflow-y-auto overscroll-contain transition duration-300 ease-out",
-				open ? "opacity-100" : "pointer-events-none opacity-0",
 			)}
+			onKeyDown={(event) => {
+				if (
+					(event.key === "Enter" || event.key === " ") &&
+					event.target === event.currentTarget
+				) {
+					event.preventDefault();
+					closeOverlay();
+				}
+			}}
 			onClick={(event) => {
 				if (event.target === event.currentTarget) {
-					onClose();
+					closeOverlay();
 				}
 			}}
 		>
@@ -78,9 +234,9 @@ export default function SiteMenuOverlay({
 
 							<div className="mt-6">
 								<button
-									ref={backButtonRef}
+									ref={closeButtonRef}
 									type="button"
-									onClick={onClose}
+									onClick={() => closeOverlay()}
 									aria-label="Back to site"
 									className={interactiveRowClassName}
 								>
@@ -102,7 +258,7 @@ export default function SiteMenuOverlay({
 									<a
 										key={item.href}
 										href={item.href}
-										onClick={onClose}
+										onClick={(event) => handleMenuItemClick(event, item.href)}
 										className={interactiveRowClassName}
 									>
 										<div>
@@ -124,6 +280,7 @@ export default function SiteMenuOverlay({
 					</div>
 				</div>
 			</section>
-		</div>
+		</div>,
+		document.body,
 	);
 }

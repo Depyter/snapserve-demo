@@ -6,8 +6,8 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { lazy, type ReactNode, Suspense } from "react";
-import OliveLoadingScreen from "../components/OliveLoadingScreen";
+import type { ReactNode } from "react";
+import Header from "../components/Header";
 import ConvexProvider from "../integrations/convex/provider";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
@@ -15,8 +15,6 @@ import appCss from "../styles.css?url";
 interface MyRouterContext {
 	queryClient: QueryClient;
 }
-
-const Header = lazy(() => import("../components/Header"));
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
@@ -29,7 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "TanStack Start Starter",
+				title: "SnapServe",
 			},
 		],
 		links: [
@@ -50,10 +48,8 @@ function RootDocument({ children }: { children: ReactNode }) {
 			</head>
 			<body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
 				<ConvexProvider>
-					<Suspense fallback={<OliveLoadingScreen />}>
-						<Header />
-						{children}
-					</Suspense>
+					<Header />
+					{children}
 					{/*<Footer />*/}
 					<TanStackDevtools
 						config={{

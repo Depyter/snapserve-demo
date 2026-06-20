@@ -130,14 +130,18 @@ Where possible, the page now uses actual screenshots from `public/assets` instea
 Important page sections live in:
 
 - `src/sections/page/HeroSection.tsx`
-- `src/sections/page/MainMenuSection.tsx`
 - `src/sections/page/FeaturesSection.tsx`
+- `src/sections/page/WaitTimeSection.tsx`
+- `src/sections/page/TestimonySection.tsx`
 - `src/sections/page/PricingSection.tsx`
+- `src/sections/page/FAQSection.tsx`
 - `src/sections/page/CTASection.tsx`
+- `src/sections/page/FooterSection.tsx`
 - `src/sections/page/Section.tsx`
 
-The route entry point is:
+The route shell and page route are:
 
+- `src/routes/__root.tsx`
 - `src/routes/index.tsx`
 
 Global styling and font imports live in:
@@ -179,4 +183,4 @@ bun run test
 ## Notes
 
 - The repo still includes Convex-related dependencies and starter integrations for future application features, but the current landing page does not depend on Convex for its main UI flow.
-- The homepage design is intentionally section-driven and not yet a full product app shell.
+- The homepage is intentionally section-driven and composed directly from route-mounted sections rather than a separate app shell.

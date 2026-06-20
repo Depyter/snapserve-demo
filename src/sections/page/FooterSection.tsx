@@ -17,13 +17,6 @@ const pageLinks: FooterLink[] = [
 	},
 ];
 
-const utilityLinks: FooterLink[] = [
-	{
-		label: "",
-		href: "#",
-	},
-];
-
 const socialLinks: FooterIconLinkData[] = [
 	{
 		label: "Facebook",
@@ -140,11 +133,6 @@ export default function FooterSection() {
 						title="Sections"
 						ariaLabel="Footer sections"
 						links={footerSectionLinks}
-					/>
-					<FooterLinkGroup
-						title="Legal"
-						ariaLabel="Footer legal"
-						links={utilityLinks}
 					/>
 				</div>
 
